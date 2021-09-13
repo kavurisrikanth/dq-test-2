@@ -14,8 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import lists.AllCustomersWithAgedGuardians2SubscriptionHelper;
 import lists.AllCustomersWithAgedGuardiansSubscriptionHelper;
+import lists.AllCustomersWithLargeInvoices2SubscriptionHelper;
 import lists.AllCustomersWithLargeInvoicesSubscriptionHelper;
 import lists.DataQueryChange;
+import models.AllCustomersWithLargeInvoices2Request;
 import models.AllCustomersWithLargeInvoicesRequest;
 import org.json.JSONObject;
 import org.springframework.beans.factory.ObjectFactory;
@@ -44,6 +46,10 @@ public class NativeSubscription extends AbstractQueryService {
   @Autowired
   private ObjectFactory<AllCustomersWithLargeInvoicesSubscriptionHelper>
       allCustomersWithLargeInvoices;
+
+  @Autowired
+  private ObjectFactory<AllCustomersWithLargeInvoices2SubscriptionHelper>
+      allCustomersWithLargeInvoices2;
 
   public Flowable<JSONObject> subscribe(JSONObject req) throws Exception {
     List<Field> fields = parseFields(req);
@@ -225,6 +231,15 @@ public class NativeSubscription extends AbstractQueryService {
           AllCustomersWithLargeInvoicesRequest req =
               ctx.readChild("in", "AllCustomersWithLargeInvoicesRequest");
           return allCustomersWithLargeInvoices
+              .getObject()
+              .subscribe(inspect(field, "data.items"), req)
+              .map((e) -> fromDataQueryDataChange(e, field));
+        }
+      case "onAllCustomersWithLargeInvoices2Change":
+        {
+          AllCustomersWithLargeInvoices2Request req =
+              ctx.readChild("in", "AllCustomersWithLargeInvoices2Request");
+          return allCustomersWithLargeInvoices2
               .getObject()
               .subscribe(inspect(field, "data.items"), req)
               .map((e) -> fromDataQueryDataChange(e, field));

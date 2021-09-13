@@ -5,6 +5,7 @@ import gqltosql.schema.DModel;
 import gqltosql.schema.FieldPrimitiveType;
 import java.util.HashMap;
 import java.util.Map;
+import models.AllCustomersWithLargeInvoices2Request;
 import models.AllCustomersWithLargeInvoicesRequest;
 import models.AllItemsRequest;
 import models.AnonymousUser;
@@ -31,6 +32,7 @@ public class ModelSchema1 {
   }
 
   public void createAllTables() {
+    addAllCustomersWithLargeInvoices2RequestFields();
     addAllCustomersWithLargeInvoicesRequestFields();
     addAllItemsRequestFields();
     addAnonymousUserFields();
@@ -56,6 +58,18 @@ public class ModelSchema1 {
 
   public <T> DModel<T> getType2(String type) {
     return ((DModel<T>) allTypes.get(type));
+  }
+
+  private void addAllCustomersWithLargeInvoices2RequestFields() {
+    DModel<AllCustomersWithLargeInvoices2Request> m =
+        getType2("AllCustomersWithLargeInvoices2Request");
+    m.addPrimitive(
+        "item",
+        AllCustomersWithLargeInvoices2Request._ITEM,
+        "_item",
+        FieldPrimitiveType.Double,
+        (s) -> s.getItem(),
+        (s, v) -> s.setItem(v));
   }
 
   private void addAllCustomersWithLargeInvoicesRequestFields() {

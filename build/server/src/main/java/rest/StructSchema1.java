@@ -3,6 +3,7 @@ package rest;
 import classes.AllCustomersWithAgedGuardians;
 import classes.AllCustomersWithAgedGuardians2;
 import classes.AllCustomersWithLargeInvoices;
+import classes.AllCustomersWithLargeInvoices2;
 import classes.AllItems;
 import classes.LoginResult;
 import classes.ReportOutAttribute;
@@ -35,6 +36,7 @@ public class StructSchema1 {
     addAllCustomersWithAgedGuardiansFields();
     addAllCustomersWithAgedGuardians2Fields();
     addAllCustomersWithLargeInvoicesFields();
+    addAllCustomersWithLargeInvoices2Fields();
     addAllItemsFields();
   }
 
@@ -293,6 +295,20 @@ public class StructSchema1 {
     m.addReferenceCollection(
         "items",
         AllCustomersWithLargeInvoices._ITEMS,
+        null,
+        null,
+        false,
+        getType("Customer"),
+        (s) -> s.getItems(),
+        (s, v) -> s.setItems(v),
+        (s) -> s.getItemsRef());
+  }
+
+  private void addAllCustomersWithLargeInvoices2Fields() {
+    DModel<AllCustomersWithLargeInvoices2> m = getType2("AllCustomersWithLargeInvoices2");
+    m.addReferenceCollection(
+        "items",
+        AllCustomersWithLargeInvoices2._ITEMS,
         null,
         null,
         false,

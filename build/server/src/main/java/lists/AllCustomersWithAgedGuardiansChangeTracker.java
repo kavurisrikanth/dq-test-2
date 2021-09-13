@@ -29,9 +29,9 @@ public class AllCustomersWithAgedGuardiansChangeTracker implements Cancellable {
 
     public AllCustomersWithAgedGuardiansData(long id, boolean _value0, long _value1, long _value2) {
       this.id = id;
-      this._value2 = _value2;
-      this._value1 = _value1;
       this._value0 = _value0;
+      this._value1 = _value1;
+      this._value2 = _value2;
     }
   }
 

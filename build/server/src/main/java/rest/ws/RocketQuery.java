@@ -9,6 +9,7 @@ import gqltosql2.OutObject;
 import java.util.UUID;
 import lists.AllCustomersWithAgedGuardians2Impl;
 import lists.AllCustomersWithAgedGuardiansImpl;
+import lists.AllCustomersWithLargeInvoices2Impl;
 import lists.AllCustomersWithLargeInvoicesImpl;
 import lists.AllItemsImpl;
 import models.OneTimePassword;
@@ -32,6 +33,7 @@ public class RocketQuery extends AbstractRocketQuery {
   @Autowired private AllCustomersWithAgedGuardiansImpl allCustomersWithAgedGuardiansImpl;
   @Autowired private AllCustomersWithAgedGuardians2Impl allCustomersWithAgedGuardians2Impl;
   @Autowired private AllCustomersWithLargeInvoicesImpl allCustomersWithLargeInvoicesImpl;
+  @Autowired private AllCustomersWithLargeInvoices2Impl allCustomersWithLargeInvoices2Impl;
   @Autowired private AllItemsImpl allItemsImpl;
   @Autowired private DataChangeTracker dataChangeTracker;
 

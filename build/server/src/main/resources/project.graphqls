@@ -140,6 +140,20 @@ type UserSessionChangeEvent
 	changeType : ChangeEventType
 }
 
+type AllCustomersWithLargeInvoices2Request
+	implements DBObject
+{
+	id : Long
+	localId : Long
+	item : Float
+}
+
+input AllCustomersWithLargeInvoices2RequestEntityInput
+{
+	id : Long
+	item : Float
+}
+
 type AllCustomersWithLargeInvoicesRequest
 	implements DBObject
 {

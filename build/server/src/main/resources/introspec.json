@@ -321,6 +321,11 @@
 			"possibleTypes": [
 				{
 					"kind": "OBJECT",
+					"name": "AllCustomersWithLargeInvoices2Request",
+					"ofType": null
+				},
+				{
+					"kind": "OBJECT",
 					"name": "AllCustomersWithLargeInvoicesRequest",
 					"ofType": null
 				},
@@ -1403,6 +1408,104 @@
 			"interfaces": [
 
 			],
+			"enumValues": null,
+			"possibleTypes": null
+		},
+		{
+			"kind": "OBJECT",
+			"name": "AllCustomersWithLargeInvoices2Request",
+			"description": "",
+			"fields": [
+				{
+					"name": "id",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "localId",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "item",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Float",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				}
+			],
+			"inputFields": null,
+			"interfaces": [
+				{
+					"kind": "INTERFACE",
+					"name": "DBObject",
+					"ofType": null
+				}
+			],
+			"enumValues": null,
+			"possibleTypes": null
+		},
+		{
+			"kind": "INPUT_OBJECT",
+			"name": "AllCustomersWithLargeInvoices2RequestEntityInput",
+			"description": "",
+			"fields": null,
+			"inputFields": [
+				{
+					"name": "id",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "item",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Float",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				}
+			],
+			"interfaces": null,
 			"enumValues": null,
 			"possibleTypes": null
 		},

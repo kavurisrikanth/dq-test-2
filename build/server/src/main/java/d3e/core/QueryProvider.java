@@ -3,14 +3,17 @@ package d3e.core;
 import classes.AllCustomersWithAgedGuardians;
 import classes.AllCustomersWithAgedGuardians2;
 import classes.AllCustomersWithLargeInvoices;
+import classes.AllCustomersWithLargeInvoices2;
 import classes.AllItems;
 import classes.LoginResult;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
 import lists.AllCustomersWithAgedGuardians2Impl;
 import lists.AllCustomersWithAgedGuardiansImpl;
+import lists.AllCustomersWithLargeInvoices2Impl;
 import lists.AllCustomersWithLargeInvoicesImpl;
 import lists.AllItemsImpl;
+import models.AllCustomersWithLargeInvoices2Request;
 import models.AllCustomersWithLargeInvoicesRequest;
 import models.AllItemsRequest;
 import models.AnonymousUser;
@@ -51,6 +54,7 @@ public class QueryProvider {
   @Autowired private AllCustomersWithAgedGuardiansImpl allCustomersWithAgedGuardiansImpl;
   @Autowired private AllCustomersWithAgedGuardians2Impl allCustomersWithAgedGuardians2Impl;
   @Autowired private AllCustomersWithLargeInvoicesImpl allCustomersWithLargeInvoicesImpl;
+  @Autowired private AllCustomersWithLargeInvoices2Impl allCustomersWithLargeInvoices2Impl;
   @Autowired private AllItemsImpl allItemsImpl;
   @Autowired private ObjectFactory<AppSessionProvider> provider;
 
@@ -98,6 +102,11 @@ public class QueryProvider {
   public AllCustomersWithLargeInvoices getAllCustomersWithLargeInvoices(
       AllCustomersWithLargeInvoicesRequest inputs) {
     return allCustomersWithLargeInvoicesImpl.get(inputs);
+  }
+
+  public AllCustomersWithLargeInvoices2 getAllCustomersWithLargeInvoices2(
+      AllCustomersWithLargeInvoices2Request inputs) {
+    return allCustomersWithLargeInvoices2Impl.get(inputs);
   }
 
   public AllItems getAllItems(AllItemsRequest inputs) {

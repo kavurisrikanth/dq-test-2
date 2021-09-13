@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 import lists.AllCustomersWithAgedGuardians2Impl;
 import lists.AllCustomersWithAgedGuardiansImpl;
+import lists.AllCustomersWithLargeInvoices2Impl;
 import lists.AllCustomersWithLargeInvoicesImpl;
 import lists.AllItemsImpl;
 import models.OneTimePassword;
@@ -63,6 +64,7 @@ public class NativeQuery extends AbstractQueryService {
   @Autowired private AllCustomersWithAgedGuardiansImpl allCustomersWithAgedGuardiansImpl;
   @Autowired private AllCustomersWithAgedGuardians2Impl allCustomersWithAgedGuardians2Impl;
   @Autowired private AllCustomersWithLargeInvoicesImpl allCustomersWithLargeInvoicesImpl;
+  @Autowired private AllCustomersWithLargeInvoices2Impl allCustomersWithLargeInvoices2Impl;
   @Autowired private AllItemsImpl allItemsImpl;
 
   @PostMapping(path = "/query", produces = MediaType.APPLICATION_JSON_VALUE)

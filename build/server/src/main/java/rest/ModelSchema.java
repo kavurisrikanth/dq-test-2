@@ -3,6 +3,7 @@ package rest;
 import classes.AllCustomersWithAgedGuardians;
 import classes.AllCustomersWithAgedGuardians2;
 import classes.AllCustomersWithLargeInvoices;
+import classes.AllCustomersWithLargeInvoices2;
 import classes.AllItems;
 import classes.ChangeEventType;
 import classes.IconType;
@@ -21,6 +22,7 @@ import d3e.core.SchemaConstants;
 import gqltosql.schema.DModel;
 import gqltosql.schema.DModelType;
 import gqltosql.schema.FieldPrimitiveType;
+import models.AllCustomersWithLargeInvoices2Request;
 import models.AllCustomersWithLargeInvoicesRequest;
 import models.AllItemsRequest;
 import models.AnonymousUser;
@@ -53,6 +55,16 @@ public class ModelSchema extends AbstractModelSchema {
     addTable(
         new DModel<DFile>(
             "DFile", SchemaConstants.DFile, 3, 0, "_dfile", DModelType.MODEL, () -> new DFile()));
+    addTable(
+        new DModel<AllCustomersWithLargeInvoices2Request>(
+                "AllCustomersWithLargeInvoices2Request",
+                SchemaConstants.AllCustomersWithLargeInvoices2Request,
+                1,
+                0,
+                "_all_customers_with_large_invoices2request",
+                DModelType.MODEL,
+                () -> new AllCustomersWithLargeInvoices2Request())
+            .trans());
     addTable(
         new DModel<AllCustomersWithLargeInvoicesRequest>(
                 "AllCustomersWithLargeInvoicesRequest",
@@ -283,6 +295,15 @@ public class ModelSchema extends AbstractModelSchema {
             null,
             DModelType.STRUCT,
             () -> new AllCustomersWithLargeInvoices()));
+    addTable(
+        new DModel<AllCustomersWithLargeInvoices2>(
+            "AllCustomersWithLargeInvoices2",
+            SchemaConstants.AllCustomersWithLargeInvoices2,
+            1,
+            0,
+            null,
+            DModelType.STRUCT,
+            () -> new AllCustomersWithLargeInvoices2()));
     addTable(
         new DModel<AllItems>(
             "AllItems",
