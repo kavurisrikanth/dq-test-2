@@ -1,0 +1,8 @@
+(Project DQTest2 {
+    name 'DQTest2'
+    domain 'd3e.DQTest2'
+    package 'DQTest2'
+    targets [
+        JavaBackEnd
+    ]
+})

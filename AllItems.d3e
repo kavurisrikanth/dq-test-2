@@ -1,0 +1,12 @@
+(DataQuery AllItems {
+    inputs [
+        (name {
+            type ({
+                primitive String
+            })
+        })
+    ]
+    query `
+        Invoice.all.where((i) => i.items.any((x) => x.name == inputs.name))
+    `
+})

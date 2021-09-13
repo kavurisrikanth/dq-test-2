@@ -1,0 +1,17 @@
+(Model Invoice {
+    creatable true
+    properties [
+        (name {
+            type ({
+                primitive String
+            })
+        })
+        (items {
+            type ({
+                model #InvoiceItem
+            })
+            collection true
+            child true
+        })
+    ]
+})

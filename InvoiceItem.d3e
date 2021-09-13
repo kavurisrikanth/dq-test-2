@@ -1,0 +1,16 @@
+(Model InvoiceItem {
+    creatable false
+    properties [
+        (name {
+            type ({
+                primitive String
+            })
+        })
+        (otherNames {
+            type ({
+                primitive String
+            })
+            collection true
+        })
+    ]
+})
