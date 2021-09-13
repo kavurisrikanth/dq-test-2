@@ -86,7 +86,6 @@ public class AllCustomersWithLargeInvoicesSubscriptionHelper
   private Output output;
   private Field field;
   private AllCustomersWithLargeInvoicesRequest inputs;
-  private Map<Long, List<Row>> c__id_Rows = MapExt.Map();
 
   @Async
   public void handleContextStart(DataQueryDataChange event) {
@@ -139,30 +138,6 @@ public class AllCustomersWithLargeInvoicesSubscriptionHelper
         ((Flowable<D3ESubscriptionEvent<Customer>>) subscription.onCustomerChangeEvent())
             .subscribe((e) -> applyCustomer(e));
     disposables.add(baseSubscribe);
-    Disposable InvoiceSubscribe =
-        ((Flowable<D3ESubscriptionEvent<Invoice>>) subscription.onInvoiceChangeEvent())
-            .subscribe(
-                (e) -> {
-                  if (e.changeType != StoreEventType.Update) {
-                    return;
-                  }
-                  Invoice value = e.model;
-                  List<Row> row0 = c__id_Rows.get(value.getId());
-                  if (row0 == null) {
-                    /*
-                    TODO: Generate the proper condition here
-                    */
-                    if (false) {
-                      loadInitialData();
-                    }
-                  } else {
-                    row0.forEach(
-                        (r) -> {
-                          applyWhereI(r, value);
-                        });
-                  }
-                });
-    disposables.add(InvoiceSubscribe);
   }
 
   public void applyCustomer(D3ESubscriptionEvent<Customer> e) {
@@ -241,10 +216,6 @@ public class AllCustomersWithLargeInvoicesSubscriptionHelper
 
   private void createDeleteChange(List<DataQueryDataChange> changes, Customer model) {
     Row row = output.get(model.getId());
-    createDeleteChange(changes, row);
-  }
-
-  private void createDeleteChange(List<DataQueryDataChange> changes, Row row) {
     if (row == null) {
       return;
     }
@@ -258,11 +229,10 @@ public class AllCustomersWithLargeInvoicesSubscriptionHelper
 
   private List<NativeObj> createCustomerData(Customer customer) {
     List<NativeObj> data = ListExt.List();
-    NativeObj row = new NativeObj(3);
+    NativeObj row = new NativeObj(2);
     row.set(0, customer.getInvoices().stream().map((m) -> m.getId()).collect(Collectors.toList()));
-    row.set(1, i.getId());
-    row.set(2, customer.getId());
-    row.setId(2);
+    row.set(1, customer.getId());
+    row.setId(1);
     data.add(row);
     return data;
   }
@@ -274,52 +244,17 @@ public class AllCustomersWithLargeInvoicesSubscriptionHelper
         });
   }
 
-  private void updateData(NativeObj ref, Map<Long, List<Row>> rows, Row thisRow, boolean remove) {
-    if (ref == null) {
-      return;
-    }
-    List<Row> list = rows.get(ref.getId());
-    if (list == null) {
-      if (remove) {
-        return;
-      }
-      list = ListExt.List();
-      rows.put(ref.getId(), list);
-    }
-    if (remove) {
-      list.remove(thisRow);
-    } else {
-      list.add(thisRow);
-    }
-  }
-
   private void updateData(DataQueryDataChange change) {
     switch (change.changeType) {
       case All:
         {
           this.output = new Output(change.nativeData);
-          this.output
-              .rows
-              .values()
-              .forEach(
-                  (r) -> {
-                    NativeObj wrappedBase = r.row;
-                    if (wrappedBase != null) {
-                      NativeObj ref0 = wrappedBase.getRef(1);
-                      updateData(ref0, c__id_Rows, r, false);
-                    }
-                  });
           break;
         }
       case Delete:
         {
           NativeObj del = change.nativeData.get(0);
-          Row delRow = output.deleteRow(del.getId());
-          NativeObj wrappedBase = delRow.row;
-          if (wrappedBase != null) {
-            NativeObj ref0 = wrappedBase.getRef(1);
-            updateData(ref0, c__id_Rows, delRow, true);
-          }
+          output.deleteRow(del.getId());
           break;
         }
       case Insert:
@@ -328,11 +263,6 @@ public class AllCustomersWithLargeInvoicesSubscriptionHelper
           String path = change.path.equals("-1") ? output.rows.size() + "" : change.path;
           Row newRow = new Row(path, add, change.index);
           output.insertRow(add.getId(), newRow);
-          NativeObj wrappedBase = newRow.row;
-          if (wrappedBase != null) {
-            NativeObj ref0 = wrappedBase.getRef(1);
-            updateData(ref0, c__id_Rows, newRow, false);
-          }
           break;
         }
       case Update:
@@ -343,22 +273,6 @@ public class AllCustomersWithLargeInvoicesSubscriptionHelper
         {
           break;
         }
-    }
-  }
-
-  private void applyWhereI(Row r, Invoice invoice) {
-    NativeObj wrappedBase = r.row;
-    NativeObj base = wrappedBase.getRef(2);
-    boolean matched =
-        ListExt.any(
-            base.getListRef(0),
-            (i) -> {
-              return Objects.equals(invoice.getMostExpensiveItem(), inputs.getItem());
-            });
-    if (!(matched)) {
-      List<DataQueryDataChange> changes = ListExt.List();
-      createDeleteChange(changes, r);
-      pushChanges(changes);
     }
   }
 }

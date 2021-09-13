@@ -28,8 +28,8 @@ public class AllCustomersWithAgedGuardians2ChangeTracker implements Cancellable 
 
     public AllCustomersWithAgedGuardians2Data(long id, long _value0, long _value1) {
       this.id = id;
-      this._value1 = _value1;
       this._value0 = _value0;
+      this._value1 = _value1;
     }
   }
 

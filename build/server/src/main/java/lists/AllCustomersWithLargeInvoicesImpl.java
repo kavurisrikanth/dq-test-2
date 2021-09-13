@@ -47,7 +47,7 @@ public class AllCustomersWithLargeInvoicesImpl extends AbsDataQueryImpl {
   public AllCustomersWithLargeInvoices getAsStruct(List<NativeObj> rows) {
     List<Customer> result = new ArrayList<>();
     for (NativeObj _r1 : rows) {
-      result.add(NativeSqlUtil.get(em, _r1.getRef(2), Customer.class));
+      result.add(NativeSqlUtil.get(em, _r1.getRef(1), Customer.class));
     }
     AllCustomersWithLargeInvoices wrap = new AllCustomersWithLargeInvoices();
     wrap.setItems(result);
@@ -99,11 +99,11 @@ public class AllCustomersWithLargeInvoicesImpl extends AbsDataQueryImpl {
 
   public List<NativeObj> getNativeResult(AllCustomersWithLargeInvoicesRequest request) {
     String sql =
-        "select cast(array_agg(b._id) as text) a0, c._id a1, a._id a2 from _customer a left join _invoice b on b._customer_id = a._id where true in (select c._most_expensive_item_id = :param_0 a0 from _invoice c where c._customer_id = a._id) group by a._id";
+        "select cast(array_agg(b._id) as text) a0, a._id a1 from _customer a left join _invoice b on b._customer_id = a._id where true in (select c._most_expensive_item_id = :param_0 a0 from _invoice c where c._customer_id = a._id) group by a._id";
     Query query = em.createNativeQuery(sql);
     setParameter(query, "param_0", request.getItem());
     this.logQuery(sql, query);
-    List<NativeObj> result = NativeSqlUtil.createNativeObj(query.getResultList(), 2);
+    List<NativeObj> result = NativeSqlUtil.createNativeObj(query.getResultList(), 1);
     return result;
   }
 }

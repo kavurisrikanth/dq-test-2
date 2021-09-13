@@ -205,10 +205,6 @@ public class Invoice extends CreatableObject {
     return new Invoice();
   }
 
-  public boolean needOldObject() {
-    return true;
-  }
-
   public void collectCreatableReferences(List<Object> _refs) {
     super.collectCreatableReferences(_refs);
     _refs.add(this.customer);
