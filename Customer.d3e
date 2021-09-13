@@ -1,0 +1,39 @@
+(Model Customer {
+    creatable true
+    properties [
+        (name {
+            type ({
+                primitive String
+            })
+            required true
+        })
+        (age {
+            type ({
+                primitive Integer
+            })
+            required true
+        })
+        (underAge {
+            type ({
+                primitive Boolean
+            })
+            computed true
+            computation `false`
+        })
+        (guardian {
+            type ({
+                model #Customer
+            })
+            required true
+            existsIf `this.underAge`
+        })
+        (invoices {
+            type ({
+                model #Invoice
+            })
+            collection true
+            inverse true
+            inverseProperty #customer
+        })
+    ]
+})

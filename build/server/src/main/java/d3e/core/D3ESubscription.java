@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.core.FlowableOnSubscribe;
 import io.reactivex.rxjava3.flowables.ConnectableFlowable;
 import javax.annotation.PostConstruct;
 import models.AnonymousUser;
+import models.Customer;
 import models.Invoice;
 import models.OneTimePassword;
 import models.User;
@@ -45,6 +46,18 @@ public class D3ESubscription implements FlowableOnSubscribe<DataStoreEvent> {
             (e) -> {
               D3ESubscriptionEvent<AnonymousUser> event = new D3ESubscriptionEvent<>();
               event.model = ((AnonymousUser) e.getEntity());
+              event.changeType = e.getType();
+              return event;
+            });
+  }
+
+  public Flowable<D3ESubscriptionEvent<Customer>> onCustomerChangeEvent() {
+    return this.flowable
+        .filter((e) -> e.getEntity() instanceof Customer)
+        .map(
+            (e) -> {
+              D3ESubscriptionEvent<Customer> event = new D3ESubscriptionEvent<>();
+              event.model = ((Customer) e.getEntity());
               event.changeType = e.getType();
               return event;
             });

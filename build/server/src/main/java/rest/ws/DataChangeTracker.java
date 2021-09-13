@@ -18,6 +18,7 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import classes.PrimitiveType;
 import d3e.core.D3ELogger;
 import d3e.core.D3ESubscription;
 import d3e.core.DFile;
@@ -26,6 +27,7 @@ import d3e.core.ListExt;
 import d3e.core.StructBase;
 import gqltosql.schema.DField;
 import gqltosql.schema.DModel;
+import gqltosql.schema.FieldPrimitiveType;
 import gqltosql.schema.FieldType;
 import gqltosql.schema.IModelSchema;
 import gqltosql2.Field;
@@ -332,6 +334,9 @@ public class DataChangeTracker {
 //		 + LISTEXT.MAP(SEL.GETFIELDS(), (F) -> F.GETField().getName()) + " Object Type: " + objType.getType() + " Type : " + type);
 		for (Field f : sel.getFields()) {
 			DField dField = f.getField();
+			if(dField.getReference() == null || dField.getReference().getType().equals("DFile")) {
+				continue;
+			}
 			FieldType fieldType = dField.getType();
 			if (fieldType == FieldType.Reference) {
 				Object value;
@@ -403,6 +408,9 @@ public class DataChangeTracker {
 				+ ListExt.map(sel.getFields(), (f) -> f.getField().getName()));
 		for (Field f : sel.getFields()) {
 			DField dField = f.getField();
+			if(dField.getReference() == null || dField.getReference().getType().equals("DFile")) {
+				continue;
+			}
 			int fieldIndex = dField.getIndex();
 			FieldType fieldType = dField.getType();
 			if (fieldType == FieldType.Reference) {

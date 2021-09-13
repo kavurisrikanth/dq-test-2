@@ -10,6 +10,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import org.apache.solr.client.solrj.beans.Field;
+import org.hibernate.annotations.ColumnDefault;
 import store.DatabaseObject;
 import store.ICloneable;
 
@@ -17,8 +18,14 @@ import store.ICloneable;
 public class InvoiceItem extends DatabaseObject {
   public static final int _NAME = 0;
   public static final int _OTHERNAMES = 1;
+  public static final int _COST = 2;
   @Field private String name;
   @Field @ElementCollection private List<String> otherNames = new ArrayList<>();
+
+  @Field
+  @ColumnDefault("0.0")
+  private double cost = 0.0d;
+
   @Field @ManyToOne private Invoice masterInvoice;
   private transient InvoiceItem old;
 
@@ -34,7 +41,7 @@ public class InvoiceItem extends DatabaseObject {
 
   @Override
   public int _fieldsCount() {
-    return 2;
+    return 3;
   }
 
   public DatabaseObject _masterObject() {
@@ -94,6 +101,18 @@ public class InvoiceItem extends DatabaseObject {
     this.otherNames.addAll(otherNames);
   }
 
+  public double getCost() {
+    return this.cost;
+  }
+
+  public void setCost(double cost) {
+    if (Objects.equals(this.cost, cost)) {
+      return;
+    }
+    fieldChanged(_COST, this.cost);
+    this.cost = cost;
+  }
+
   public Invoice getMasterInvoice() {
     return this.masterInvoice;
   }
@@ -129,6 +148,7 @@ public class InvoiceItem extends DatabaseObject {
     InvoiceItem _obj = ((InvoiceItem) dbObj);
     _obj.setName(name);
     _obj.setOtherNames(otherNames);
+    _obj.setCost(cost);
   }
 
   public InvoiceItem cloneInstance(InvoiceItem cloneObj) {
@@ -138,6 +158,7 @@ public class InvoiceItem extends DatabaseObject {
     super.cloneInstance(cloneObj);
     cloneObj.setName(this.getName());
     cloneObj.setOtherNames(new ArrayList<>(this.getOtherNames()));
+    cloneObj.setCost(this.getCost());
     return cloneObj;
   }
 

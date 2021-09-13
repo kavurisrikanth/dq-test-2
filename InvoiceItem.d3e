@@ -12,5 +12,11 @@
             })
             collection true
         })
+        (cost {
+            type ({
+                primitive Double
+            })
+            required true
+        })
     ]
 })

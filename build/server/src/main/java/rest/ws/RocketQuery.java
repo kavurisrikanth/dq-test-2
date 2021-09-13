@@ -7,6 +7,9 @@ import gqltosql2.Field;
 import gqltosql2.GqlToSql;
 import gqltosql2.OutObject;
 import java.util.UUID;
+import lists.AllCustomersWithAgedGuardians2Impl;
+import lists.AllCustomersWithAgedGuardiansImpl;
+import lists.AllCustomersWithLargeInvoicesImpl;
 import lists.AllItemsImpl;
 import models.OneTimePassword;
 import models.User;
@@ -26,6 +29,9 @@ public class RocketQuery extends AbstractRocketQuery {
   @Autowired private ObjectFactory<AppSessionProvider> provider;
   @Autowired private JwtTokenUtil jwtTokenUtil;
   @Autowired private OneTimePasswordRepository oneTimePasswordRepository;
+  @Autowired private AllCustomersWithAgedGuardiansImpl allCustomersWithAgedGuardiansImpl;
+  @Autowired private AllCustomersWithAgedGuardians2Impl allCustomersWithAgedGuardians2Impl;
+  @Autowired private AllCustomersWithLargeInvoicesImpl allCustomersWithLargeInvoicesImpl;
   @Autowired private AllItemsImpl allItemsImpl;
   @Autowired private DataChangeTracker dataChangeTracker;
 
@@ -65,6 +71,16 @@ public class RocketQuery extends AbstractRocketQuery {
             return singleResult("AnonymousUser", false, one, tracker);
           }
           return singleResult("AnonymousUser", false, one);
+        }
+      case "getCustomerById":
+        {
+          OutObject one = gqlToSql.execute("Customer", field, ctx.readLong());
+          if (subscribed) {
+            OutObjectTracker tracker = new OutObjectTracker(dataChangeTracker, session, field);
+            tracker.init(one);
+            return singleResult("Customer", false, one, tracker);
+          }
+          return singleResult("Customer", false, one);
         }
       case "getInvoiceById":
         {

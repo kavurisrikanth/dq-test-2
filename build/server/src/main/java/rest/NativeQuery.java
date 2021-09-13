@@ -9,6 +9,9 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import lists.AllCustomersWithAgedGuardians2Impl;
+import lists.AllCustomersWithAgedGuardiansImpl;
+import lists.AllCustomersWithLargeInvoicesImpl;
 import lists.AllItemsImpl;
 import models.OneTimePassword;
 import models.User;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import repository.jpa.AnonymousUserRepository;
+import repository.jpa.CustomerRepository;
 import repository.jpa.InvoiceRepository;
 import repository.jpa.OneTimePasswordRepository;
 import repository.jpa.UserRepository;
@@ -49,12 +53,16 @@ public class NativeQuery extends AbstractQueryService {
   @Autowired private IModelSchema schema;
   @Autowired private JwtTokenUtil jwtTokenUtil;
   @Autowired private AnonymousUserRepository anonymousUserRepository;
+  @Autowired private CustomerRepository customerRepository;
   @Autowired private InvoiceRepository invoiceRepository;
   @Autowired private OneTimePasswordRepository oneTimePasswordRepository;
   @Autowired private UserRepository userRepository;
   @Autowired private UserSessionRepository userSessionRepository;
   @Autowired private PasswordEncoder passwordEncoder;
   @Autowired private ObjectFactory<AppSessionProvider> provider;
+  @Autowired private AllCustomersWithAgedGuardiansImpl allCustomersWithAgedGuardiansImpl;
+  @Autowired private AllCustomersWithAgedGuardians2Impl allCustomersWithAgedGuardians2Impl;
+  @Autowired private AllCustomersWithLargeInvoicesImpl allCustomersWithLargeInvoicesImpl;
   @Autowired private AllItemsImpl allItemsImpl;
 
   @PostMapping(path = "/query", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -112,6 +120,10 @@ public class NativeQuery extends AbstractQueryService {
       case "getAnonymousUserById":
         {
           return gqlToSql.execute("AnonymousUser", field, ctx.readLong("id"));
+        }
+      case "getCustomerById":
+        {
+          return gqlToSql.execute("Customer", field, ctx.readLong("id"));
         }
       case "getInvoiceById":
         {

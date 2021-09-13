@@ -73,7 +73,7 @@ public class DocumentSqlColumn implements ISqlColumn {
 
 	public void read(IModelSchema schema, SqlRow o, Object obj) throws JSONException {
 		GraphQLDataFetcher fetcher = new GraphQLDataFetcher(schema);
-		Object res = df.getValue(obj);
+		Object res = obj;
 		o.put(df.getName(), fetcher.fetchValue(field, res, df.getReference()));
 		o.put(df.getName(), res);
 	}

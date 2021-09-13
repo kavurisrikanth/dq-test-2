@@ -5,9 +5,11 @@ import gqltosql.schema.DModel;
 import gqltosql.schema.FieldPrimitiveType;
 import java.util.HashMap;
 import java.util.Map;
+import models.AllCustomersWithLargeInvoicesRequest;
 import models.AllItemsRequest;
 import models.AnonymousUser;
 import models.Avatar;
+import models.Customer;
 import models.D3EImage;
 import models.D3EMessage;
 import models.EmailMessage;
@@ -29,9 +31,11 @@ public class ModelSchema1 {
   }
 
   public void createAllTables() {
+    addAllCustomersWithLargeInvoicesRequestFields();
     addAllItemsRequestFields();
     addAnonymousUserFields();
     addAvatarFields();
+    addCustomerFields();
     addD3EImageFields();
     addD3EMessageFields();
     addEmailMessageFields();
@@ -52,6 +56,19 @@ public class ModelSchema1 {
 
   public <T> DModel<T> getType2(String type) {
     return ((DModel<T>) allTypes.get(type));
+  }
+
+  private void addAllCustomersWithLargeInvoicesRequestFields() {
+    DModel<AllCustomersWithLargeInvoicesRequest> m =
+        getType2("AllCustomersWithLargeInvoicesRequest");
+    m.addReference(
+        "item",
+        AllCustomersWithLargeInvoicesRequest._ITEM,
+        "_item_id",
+        false,
+        getType("InvoiceItem"),
+        (s) -> s.getItem(),
+        (s, v) -> s.setItem(v));
   }
 
   private void addAllItemsRequestFields() {
@@ -87,6 +104,41 @@ public class ModelSchema1 {
         FieldPrimitiveType.String,
         (s) -> s.getCreateFrom(),
         (s, v) -> s.setCreateFrom(v));
+  }
+
+  private void addCustomerFields() {
+    DModel<Customer> m = getType2("Customer");
+    m.addPrimitive(
+        "name",
+        Customer._NAME,
+        "_name",
+        FieldPrimitiveType.String,
+        (s) -> s.getName(),
+        (s, v) -> s.setName(v));
+    m.addPrimitive(
+        "age",
+        Customer._AGE,
+        "_age",
+        FieldPrimitiveType.Integer,
+        (s) -> s.getAge(),
+        (s, v) -> s.setAge(v));
+    m.addPrimitive(
+        "underAge",
+        Customer._UNDERAGE,
+        "_under_age",
+        FieldPrimitiveType.Boolean,
+        (s) -> s.isUnderAge(),
+        (s, v) -> s.setUnderAge(v));
+    m.addReference(
+        "guardian",
+        Customer._GUARDIAN,
+        "_guardian_id",
+        false,
+        getType("Customer"),
+        (s) -> s.getGuardian(),
+        (s, v) -> s.setGuardian(v));
+    m.addInverseCollection(
+        "invoices", Customer._INVOICES, "_customer_id", getType("Invoice"), (s) -> s.getInvoices());
   }
 
   private void addD3EImageFields() {
@@ -211,12 +263,20 @@ public class ModelSchema1 {
   private void addInvoiceFields() {
     DModel<Invoice> m = getType2("Invoice");
     m.addPrimitive(
-        "name",
-        Invoice._NAME,
-        "_name",
-        FieldPrimitiveType.String,
-        (s) -> s.getName(),
-        (s, v) -> s.setName(v));
+        "totalAmount",
+        Invoice._TOTALAMOUNT,
+        "_total_amount",
+        FieldPrimitiveType.Double,
+        (s) -> s.getTotalAmount(),
+        (s, v) -> s.setTotalAmount(v));
+    m.addReference(
+        "mostExpensiveItem",
+        Invoice._MOSTEXPENSIVEITEM,
+        "_most_expensive_item_id",
+        false,
+        getType("InvoiceItem"),
+        (s) -> s.getMostExpensiveItem(),
+        (s, v) -> s.setMostExpensiveItem(v));
     m.addReferenceCollection(
         "items",
         Invoice._ITEMS,
@@ -226,6 +286,14 @@ public class ModelSchema1 {
         getType("InvoiceItem"),
         (s) -> s.getItems(),
         (s, v) -> s.setItems(v));
+    m.addReference(
+        "customer",
+        Invoice._CUSTOMER,
+        "_customer_id",
+        false,
+        getType("Customer"),
+        (s) -> s.getCustomer(),
+        (s, v) -> s.setCustomer(v));
   }
 
   private void addInvoiceItemFields() {
@@ -245,6 +313,13 @@ public class ModelSchema1 {
         FieldPrimitiveType.String,
         (s) -> s.getOtherNames(),
         (s, v) -> s.setOtherNames(v));
+    m.addPrimitive(
+        "cost",
+        InvoiceItem._COST,
+        "_cost",
+        FieldPrimitiveType.Double,
+        (s) -> s.getCost(),
+        (s, v) -> s.setCost(v));
   }
 
   private void addOneTimePasswordFields() {

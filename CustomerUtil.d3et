@@ -1,0 +1,5 @@
+class CustomerUtil {
+    static Integer ageInYears(Customer c) {
+        return 0;
+    }
+}

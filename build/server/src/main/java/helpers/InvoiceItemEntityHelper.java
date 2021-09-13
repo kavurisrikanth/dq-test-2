@@ -1,5 +1,6 @@
 package helpers;
 
+import models.Invoice;
 import models.InvoiceItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,22 @@ public class InvoiceItemEntityHelper<T extends InvoiceItem> implements EntityHel
     if (ctx.has("otherNames")) {
       entity.setOtherNames(ctx.readStringColl("otherNames"));
     }
+    if (ctx.has("cost")) {
+      entity.setCost(ctx.readDouble("cost"));
+    }
   }
 
   public void referenceFromValidations(T entity, EntityValidationContext validationContext) {}
 
+  public void validateFieldCost(
+      T entity, EntityValidationContext validationContext, boolean onCreate, boolean onUpdate) {
+    double it = entity.getCost();
+  }
+
   public void validateInternal(
-      T entity, EntityValidationContext validationContext, boolean onCreate, boolean onUpdate) {}
+      T entity, EntityValidationContext validationContext, boolean onCreate, boolean onUpdate) {
+    validateFieldCost(entity, validationContext, onCreate, onUpdate);
+  }
 
   public void validateOnCreate(T entity, EntityValidationContext validationContext) {
     validateInternal(entity, validationContext, true, false);
@@ -63,8 +74,19 @@ public class InvoiceItemEntityHelper<T extends InvoiceItem> implements EntityHel
   @Override
   public void compute(T entity) {}
 
+  private void deleteMostExpensiveItemInInvoice(T entity, EntityValidationContext deletionContext) {
+    if (EntityHelper.haveUnDeleted(this.invoiceRepository.getByMostExpensiveItem(entity))) {
+      deletionContext.addEntityError(
+          "This InvoiceItem cannot be deleted as it is being referred to by Invoice.");
+    }
+  }
+
   public Boolean onDelete(T entity, boolean internal, EntityValidationContext deletionContext) {
     return true;
+  }
+
+  public void validateOnDelete(T entity, EntityValidationContext deletionContext) {
+    this.deleteMostExpensiveItemInInvoice(entity, deletionContext);
   }
 
   @Override

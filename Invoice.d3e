@@ -1,10 +1,19 @@
 (Model Invoice {
+    master #Customer
     creatable true
     properties [
-        (name {
+        (totalAmount {
             type ({
-                primitive String
+                primitive Double
             })
+            computed true
+            computation `0.0`
+        })
+        (mostExpensiveItem {
+            type ({
+                model #InvoiceItem
+            })
+            referenceFrom `this.items`
         })
         (items {
             type ({
@@ -12,6 +21,12 @@
             })
             collection true
             child true
+        })
+        (customer {
+            type ({
+                model #Customer
+            })
+            required true
         })
     ]
 })

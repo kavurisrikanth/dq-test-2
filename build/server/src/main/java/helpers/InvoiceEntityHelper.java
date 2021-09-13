@@ -1,9 +1,13 @@
 package helpers;
 
+import d3e.core.IterableExt;
+import java.util.List;
+import models.Customer;
 import models.Invoice;
 import models.InvoiceItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import repository.jpa.CustomerRepository;
 import repository.jpa.InvoiceRepository;
 import rest.GraphQLInputContext;
 import store.EntityHelper;
@@ -14,6 +18,7 @@ import store.EntityValidationContext;
 public class InvoiceEntityHelper<T extends Invoice> implements EntityHelper<T> {
   @Autowired protected EntityMutator mutator;
   @Autowired private InvoiceRepository invoiceRepository;
+  @Autowired private CustomerRepository customerRepository;
 
   public void setMutator(EntityMutator obj) {
     mutator = obj;
@@ -25,19 +30,43 @@ public class InvoiceEntityHelper<T extends Invoice> implements EntityHelper<T> {
 
   @Override
   public void fromInput(T entity, GraphQLInputContext ctx) {
-    if (ctx.has("name")) {
-      entity.setName(ctx.readString("name"));
+    if (ctx.has("mostExpensiveItem")) {
+      entity.setMostExpensiveItem(ctx.readRef("mostExpensiveItem", "InvoiceItem"));
     }
     if (ctx.has("items")) {
       entity.setItems(ctx.readChildColl("items", "InvoiceItem"));
     }
+    if (ctx.has("customer")) {
+      entity.setCustomer(ctx.readRef("customer", "Customer"));
+    }
     entity.updateMasters((o) -> {});
   }
 
-  public void referenceFromValidations(T entity, EntityValidationContext validationContext) {}
+  public List<InvoiceItem> computeMostExpensiveItemReferenceFrom(T entity) {
+    return entity.getItems();
+  }
+
+  public void referenceFromValidations(T entity, EntityValidationContext validationContext) {
+    if (entity.getMostExpensiveItem() != null
+        && !(IterableExt.contains(entity.getItems(), entity.getMostExpensiveItem()))) {
+      validationContext.addFieldError(
+          "mostExpensiveItem", "mostExpensiveItem referenceFrom validation error");
+    }
+  }
+
+  public void validateFieldCustomer(
+      T entity, EntityValidationContext validationContext, boolean onCreate, boolean onUpdate) {
+    Customer it = entity.getCustomer();
+    if (it == null) {
+      validationContext.addFieldError("customer", "customer is required.");
+      return;
+    }
+  }
 
   public void validateInternal(
       T entity, EntityValidationContext validationContext, boolean onCreate, boolean onUpdate) {
+    referenceFromValidations(entity, validationContext);
+    validateFieldCustomer(entity, validationContext, onCreate, onUpdate);
     long itemsIndex = 0l;
     for (InvoiceItem obj : entity.getItems()) {
       InvoiceItemEntityHelper helper = mutator.getHelperByInstance(obj);
@@ -55,6 +84,13 @@ public class InvoiceEntityHelper<T extends Invoice> implements EntityHelper<T> {
 
   public void validateOnUpdate(T entity, EntityValidationContext validationContext) {
     validateInternal(entity, validationContext, false, true);
+  }
+
+  public void computeTotalAmount(T entity) {
+    try {
+      entity.setTotalAmount(0.0d);
+    } catch (RuntimeException e) {
+    }
   }
 
   @Override
@@ -77,6 +113,7 @@ public class InvoiceEntityHelper<T extends Invoice> implements EntityHelper<T> {
 
   @Override
   public void compute(T entity) {
+    this.computeTotalAmount(entity);
     for (InvoiceItem obj : entity.getItems()) {
       InvoiceItemEntityHelper helper = mutator.getHelperByInstance(obj);
       helper.compute(obj);
@@ -84,6 +121,9 @@ public class InvoiceEntityHelper<T extends Invoice> implements EntityHelper<T> {
   }
 
   public Boolean onDelete(T entity, boolean internal, EntityValidationContext deletionContext) {
+    if (entity.getCustomer() != null) {
+      entity.getCustomer().removeFromInvoices(entity);
+    }
     return true;
   }
 

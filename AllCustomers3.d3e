@@ -1,0 +1,13 @@
+(DataQuery AllCustomersWithLargeInvoices {
+    inputs [
+        (item {
+            type ({
+                model #InvoiceItem
+            })
+        })
+    ]
+    query `
+        Customer.all.where((c) => c.invoices.any((i) => i.mostExpensiveItem == inputs.item))
+    `
+    enableSync true
+})

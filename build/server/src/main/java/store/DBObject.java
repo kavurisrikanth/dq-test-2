@@ -64,6 +64,11 @@ public abstract class DBObject {
 		_changes.clear();
 	}
 	
+	public void _updateChanges(DBObject other) {
+		this._changes = other._changes;
+		this._oldValues = other._oldValues;
+	}
+	
 	protected void onPropertySet() {
 
 	}

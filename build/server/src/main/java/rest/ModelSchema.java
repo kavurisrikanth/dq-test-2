@@ -1,5 +1,8 @@
 package rest;
 
+import classes.AllCustomersWithAgedGuardians;
+import classes.AllCustomersWithAgedGuardians2;
+import classes.AllCustomersWithLargeInvoices;
 import classes.AllItems;
 import classes.ChangeEventType;
 import classes.IconType;
@@ -18,9 +21,11 @@ import d3e.core.SchemaConstants;
 import gqltosql.schema.DModel;
 import gqltosql.schema.DModelType;
 import gqltosql.schema.FieldPrimitiveType;
+import models.AllCustomersWithLargeInvoicesRequest;
 import models.AllItemsRequest;
 import models.AnonymousUser;
 import models.Avatar;
+import models.Customer;
 import models.D3EImage;
 import models.D3EMessage;
 import models.EmailMessage;
@@ -48,6 +53,16 @@ public class ModelSchema extends AbstractModelSchema {
     addTable(
         new DModel<DFile>(
             "DFile", SchemaConstants.DFile, 3, 0, "_dfile", DModelType.MODEL, () -> new DFile()));
+    addTable(
+        new DModel<AllCustomersWithLargeInvoicesRequest>(
+                "AllCustomersWithLargeInvoicesRequest",
+                SchemaConstants.AllCustomersWithLargeInvoicesRequest,
+                1,
+                0,
+                "_all_customers_with_large_invoices_request",
+                DModelType.MODEL,
+                () -> new AllCustomersWithLargeInvoicesRequest())
+            .trans());
     addTable(
         new DModel<AllItemsRequest>(
                 "AllItemsRequest",
@@ -77,6 +92,15 @@ public class ModelSchema extends AbstractModelSchema {
             DModelType.MODEL,
             () -> new Avatar()));
     addTable(
+        new DModel<Customer>(
+            "Customer",
+            SchemaConstants.Customer,
+            5,
+            0,
+            "_customer",
+            DModelType.MODEL,
+            () -> new Customer()));
+    addTable(
         new DModel<D3EImage>(
                 "D3EImage",
                 SchemaConstants.D3EImage,
@@ -104,7 +128,7 @@ public class ModelSchema extends AbstractModelSchema {
         new DModel<Invoice>(
             "Invoice",
             SchemaConstants.Invoice,
-            2,
+            4,
             0,
             "_invoice",
             DModelType.MODEL,
@@ -113,7 +137,7 @@ public class ModelSchema extends AbstractModelSchema {
         new DModel<InvoiceItem>(
             "InvoiceItem",
             SchemaConstants.InvoiceItem,
-            2,
+            3,
             0,
             "_invoice_item",
             DModelType.MODEL,
@@ -232,6 +256,33 @@ public class ModelSchema extends AbstractModelSchema {
             null,
             DModelType.STRUCT,
             () -> new LoginResult()));
+    addTable(
+        new DModel<AllCustomersWithAgedGuardians>(
+            "AllCustomersWithAgedGuardians",
+            SchemaConstants.AllCustomersWithAgedGuardians,
+            1,
+            0,
+            null,
+            DModelType.STRUCT,
+            () -> new AllCustomersWithAgedGuardians()));
+    addTable(
+        new DModel<AllCustomersWithAgedGuardians2>(
+            "AllCustomersWithAgedGuardians2",
+            SchemaConstants.AllCustomersWithAgedGuardians2,
+            1,
+            0,
+            null,
+            DModelType.STRUCT,
+            () -> new AllCustomersWithAgedGuardians2()));
+    addTable(
+        new DModel<AllCustomersWithLargeInvoices>(
+            "AllCustomersWithLargeInvoices",
+            SchemaConstants.AllCustomersWithLargeInvoices,
+            1,
+            0,
+            null,
+            DModelType.STRUCT,
+            () -> new AllCustomersWithLargeInvoices()));
     addTable(
         new DModel<AllItems>(
             "AllItems",

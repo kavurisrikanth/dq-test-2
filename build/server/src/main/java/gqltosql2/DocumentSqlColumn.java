@@ -70,7 +70,7 @@ public class DocumentSqlColumn implements ISqlColumn {
 
 	public void read(IModelSchema schema, OutObject o, Object obj) {
 		SqlOutObjectFetcher fetcher = new SqlOutObjectFetcher(schema);
-		Object res = df.getValue(obj);
+		Object res = obj;
 		o.add(df.getName(), fetcher.fetchValue(field, res, df.getReference()));
 	}
 }

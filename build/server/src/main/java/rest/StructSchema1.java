@@ -1,5 +1,8 @@
 package rest;
 
+import classes.AllCustomersWithAgedGuardians;
+import classes.AllCustomersWithAgedGuardians2;
+import classes.AllCustomersWithLargeInvoices;
 import classes.AllItems;
 import classes.LoginResult;
 import classes.ReportOutAttribute;
@@ -29,6 +32,9 @@ public class StructSchema1 {
     addReportOutRowFields();
     addReportOutCellFields();
     addLoginResultFields();
+    addAllCustomersWithAgedGuardiansFields();
+    addAllCustomersWithAgedGuardians2Fields();
+    addAllCustomersWithLargeInvoicesFields();
     addAllItemsFields();
   }
 
@@ -252,6 +258,48 @@ public class StructSchema1 {
         FieldPrimitiveType.String,
         (s) -> s.getFailureMessage(),
         (s, v) -> s.setFailureMessage(v));
+  }
+
+  private void addAllCustomersWithAgedGuardiansFields() {
+    DModel<AllCustomersWithAgedGuardians> m = getType2("AllCustomersWithAgedGuardians");
+    m.addReferenceCollection(
+        "items",
+        AllCustomersWithAgedGuardians._ITEMS,
+        null,
+        null,
+        false,
+        getType("Customer"),
+        (s) -> s.getItems(),
+        (s, v) -> s.setItems(v),
+        (s) -> s.getItemsRef());
+  }
+
+  private void addAllCustomersWithAgedGuardians2Fields() {
+    DModel<AllCustomersWithAgedGuardians2> m = getType2("AllCustomersWithAgedGuardians2");
+    m.addReferenceCollection(
+        "items",
+        AllCustomersWithAgedGuardians2._ITEMS,
+        null,
+        null,
+        false,
+        getType("Customer"),
+        (s) -> s.getItems(),
+        (s, v) -> s.setItems(v),
+        (s) -> s.getItemsRef());
+  }
+
+  private void addAllCustomersWithLargeInvoicesFields() {
+    DModel<AllCustomersWithLargeInvoices> m = getType2("AllCustomersWithLargeInvoices");
+    m.addReferenceCollection(
+        "items",
+        AllCustomersWithLargeInvoices._ITEMS,
+        null,
+        null,
+        false,
+        getType("Customer"),
+        (s) -> s.getItems(),
+        (s, v) -> s.setItems(v),
+        (s) -> s.getItemsRef());
   }
 
   private void addAllItemsFields() {

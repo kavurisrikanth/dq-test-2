@@ -7,6 +7,6 @@
         })
     ]
     query `
-        Invoice.all.where((i) => i.items.any((x) => x.name == inputs.name))
+        Invoice.all.where((i) => i.customer.name == inputs.name)
     `
 })

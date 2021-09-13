@@ -321,6 +321,11 @@
 			"possibleTypes": [
 				{
 					"kind": "OBJECT",
+					"name": "AllCustomersWithLargeInvoicesRequest",
+					"ofType": null
+				},
+				{
+					"kind": "OBJECT",
 					"name": "AllItemsRequest",
 					"ofType": null
 				},
@@ -332,6 +337,11 @@
 				{
 					"kind": "OBJECT",
 					"name": "Avatar",
+					"ofType": null
+				},
+				{
+					"kind": "OBJECT",
+					"name": "Customer",
 					"ofType": null
 				},
 				{
@@ -667,6 +677,29 @@
 					"deprecationReason": null
 				},
 				{
+					"name": "getCustomerById",
+					"description": "",
+					"args": [
+						{
+							"name": "id",
+							"description": "",
+							"type": {
+								"kind": "SCALAR",
+								"name": "Long",
+								"ofType": null
+							},
+							"defaultValue": null
+						}
+					],
+					"type": {
+						"kind": "OBJECT",
+						"name": "Customer",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
 					"name": "getInvoiceById",
 					"description": "",
 					"args": [
@@ -892,6 +925,70 @@
 					"deprecationReason": null
 				},
 				{
+					"name": "onCustomerChangeEvent",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "OBJECT",
+						"name": "CustomerChangeEvent",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "onCustomerChangeEventById",
+					"description": "",
+					"args": [
+						{
+							"name": "ids",
+							"description": "",
+							"type": {
+								"kind": "LIST",
+								"name": null,
+								"ofType": {
+									"kind": "SCALAR",
+									"name": "Long",
+									"ofType": null
+								}
+							},
+							"defaultValue": null
+						}
+					],
+					"type": {
+						"kind": "OBJECT",
+						"name": "CustomerChangeEvent",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "onCustomerInvoicesChange",
+					"description": "",
+					"args": [
+						{
+							"name": "id",
+							"description": "",
+							"type": {
+								"kind": "SCALAR",
+								"name": "Long",
+								"ofType": null
+							},
+							"defaultValue": null
+						}
+					],
+					"type": {
+						"kind": "OBJECT",
+						"name": "InvoiceChangeEvent",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
 					"name": "onInvoiceChangeEvent",
 					"description": "",
 					"args": [
@@ -1106,6 +1203,47 @@
 		},
 		{
 			"kind": "OBJECT",
+			"name": "CustomerChangeEvent",
+			"description": "",
+			"fields": [
+				{
+					"name": "model",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "OBJECT",
+						"name": "Customer",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "changeType",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "ENUM",
+						"name": "ChangeEventType",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				}
+			],
+			"inputFields": null,
+			"interfaces": [
+
+			],
+			"enumValues": null,
+			"possibleTypes": null
+		},
+		{
+			"kind": "OBJECT",
 			"name": "InvoiceChangeEvent",
 			"description": "",
 			"fields": [
@@ -1265,6 +1403,104 @@
 			"interfaces": [
 
 			],
+			"enumValues": null,
+			"possibleTypes": null
+		},
+		{
+			"kind": "OBJECT",
+			"name": "AllCustomersWithLargeInvoicesRequest",
+			"description": "",
+			"fields": [
+				{
+					"name": "id",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "localId",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "item",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "OBJECT",
+						"name": "InvoiceItem",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				}
+			],
+			"inputFields": null,
+			"interfaces": [
+				{
+					"kind": "INTERFACE",
+					"name": "DBObject",
+					"ofType": null
+				}
+			],
+			"enumValues": null,
+			"possibleTypes": null
+		},
+		{
+			"kind": "INPUT_OBJECT",
+			"name": "AllCustomersWithLargeInvoicesRequestEntityInput",
+			"description": "",
+			"fields": null,
+			"inputFields": [
+				{
+					"name": "id",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "item",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				}
+			],
+			"interfaces": null,
 			"enumValues": null,
 			"possibleTypes": null
 		},
@@ -1608,6 +1844,192 @@
 					"type": {
 						"kind": "SCALAR",
 						"name": "String",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				}
+			],
+			"interfaces": null,
+			"enumValues": null,
+			"possibleTypes": null
+		},
+		{
+			"kind": "OBJECT",
+			"name": "Customer",
+			"description": "",
+			"fields": [
+				{
+					"name": "id",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "localId",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "name",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "age",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "underAge",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Boolean",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "guardian",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "OBJECT",
+						"name": "Customer",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "invoices",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "LIST",
+						"name": null,
+						"ofType": {
+							"kind": "OBJECT",
+							"name": "Invoice",
+							"ofType": null
+						}
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				}
+			],
+			"inputFields": null,
+			"interfaces": [
+				{
+					"kind": "INTERFACE",
+					"name": "DBObject",
+					"ofType": null
+				}
+			],
+			"enumValues": null,
+			"possibleTypes": null
+		},
+		{
+			"kind": "INPUT_OBJECT",
+			"name": "CustomerEntityInput",
+			"description": "",
+			"fields": null,
+			"inputFields": [
+				{
+					"name": "id",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "name",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "String",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "age",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "guardian",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
 						"ofType": null
 					},
 					"isDeprecated": false,
@@ -2330,14 +2752,28 @@
 					"deprecationReason": null
 				},
 				{
-					"name": "name",
+					"name": "totalAmount",
 					"description": "",
 					"args": [
 
 					],
 					"type": {
 						"kind": "SCALAR",
-						"name": "String",
+						"name": "Float",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "mostExpensiveItem",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "OBJECT",
+						"name": "InvoiceItem",
 						"ofType": null
 					},
 					"isDeprecated": false,
@@ -2357,6 +2793,20 @@
 							"name": "InvoiceItem",
 							"ofType": null
 						}
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "customer",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "OBJECT",
+						"name": "Customer",
+						"ofType": null
 					},
 					"isDeprecated": false,
 					"deprecationReason": null
@@ -2394,14 +2844,14 @@
 					"deprecationReason": null
 				},
 				{
-					"name": "name",
+					"name": "mostExpensiveItem",
 					"description": "",
 					"args": [
 
 					],
 					"type": {
 						"kind": "SCALAR",
-						"name": "String",
+						"name": "Long",
 						"ofType": null
 					},
 					"isDeprecated": false,
@@ -2421,6 +2871,20 @@
 							"name": "InvoiceItemEntityInput",
 							"ofType": null
 						}
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "customer",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Long",
+						"ofType": null
 					},
 					"isDeprecated": false,
 					"deprecationReason": null
@@ -2494,6 +2958,20 @@
 					},
 					"isDeprecated": false,
 					"deprecationReason": null
+				},
+				{
+					"name": "cost",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Float",
+						"ofType": null
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
 				}
 			],
 			"inputFields": null,
@@ -2555,6 +3033,20 @@
 							"name": "String",
 							"ofType": null
 						}
+					},
+					"isDeprecated": false,
+					"deprecationReason": null
+				},
+				{
+					"name": "cost",
+					"description": "",
+					"args": [
+
+					],
+					"type": {
+						"kind": "SCALAR",
+						"name": "Float",
+						"ofType": null
 					},
 					"isDeprecated": false,
 					"deprecationReason": null

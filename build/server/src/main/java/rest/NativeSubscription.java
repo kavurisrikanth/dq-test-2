@@ -12,6 +12,11 @@ import graphql.language.Field;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.HashMap;
 import java.util.List;
+import lists.AllCustomersWithAgedGuardians2SubscriptionHelper;
+import lists.AllCustomersWithAgedGuardiansSubscriptionHelper;
+import lists.AllCustomersWithLargeInvoicesSubscriptionHelper;
+import lists.DataQueryChange;
+import models.AllCustomersWithLargeInvoicesRequest;
 import org.json.JSONObject;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +33,38 @@ public class NativeSubscription extends AbstractQueryService {
   @Autowired private IModelSchema schema;
   @Autowired private GqlToSql gqltosql;
 
+  @Autowired
+  private ObjectFactory<AllCustomersWithAgedGuardiansSubscriptionHelper>
+      allCustomersWithAgedGuardians;
+
+  @Autowired
+  private ObjectFactory<AllCustomersWithAgedGuardians2SubscriptionHelper>
+      allCustomersWithAgedGuardians2;
+
+  @Autowired
+  private ObjectFactory<AllCustomersWithLargeInvoicesSubscriptionHelper>
+      allCustomersWithLargeInvoices;
+
   public Flowable<JSONObject> subscribe(JSONObject req) throws Exception {
     List<Field> fields = parseFields(req);
     Field field = fields.get(0);
     JSONObject variables = req.getJSONObject("variables");
     return executeOperation(field, variables);
+  }
+
+  private JSONObject fromDataQueryDataChange(DataQueryChange<?> event, Field field) {
+    JSONObject data = new JSONObject();
+    JSONObject opData = new JSONObject();
+    try {
+      opData.put("changeType", event.changeType.name());
+      opData.put("path", event.path);
+      opData.put("data", event.data);
+      opData.put("position", event.index);
+      data.put(field.getName(), opData);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return data;
   }
 
   private <T> JSONObject fromD3ESubscriptionEventExternal(
@@ -96,6 +128,28 @@ public class NativeSubscription extends AbstractQueryService {
               .filter((e) -> ids.contains(e.model.getId()))
               .map((e) -> fromD3ESubscriptionEvent(e, field, "AnonymousUser"));
         }
+      case "onCustomerChangeEvent":
+        {
+          return subscription
+              .onCustomerChangeEvent()
+              .map((e) -> fromD3ESubscriptionEvent(e, field, "Customer"));
+        }
+      case "onCustomerChangeEventById":
+        {
+          List<Long> ids = ctx.readLongColl("ids");
+          return subscription
+              .onCustomerChangeEvent()
+              .filter((e) -> ids.contains(e.model.getId()))
+              .map((e) -> fromD3ESubscriptionEvent(e, field, "Customer"));
+        }
+      case "onCustomerInvoicesChange":
+        {
+          Long id = ctx.readLong("id");
+          return subscription
+              .onInvoiceChangeEvent()
+              .filter((e) -> e.model.getCustomer() != null && e.model.getCustomer().getId() == id)
+              .map((e) -> fromD3ESubscriptionEvent(e, field, "Invoice"));
+        }
       case "onInvoiceChangeEvent":
         {
           return subscription
@@ -151,6 +205,29 @@ public class NativeSubscription extends AbstractQueryService {
               .onUserSessionChangeEvent()
               .filter((e) -> ids.contains(e.model.getId()))
               .map((e) -> fromD3ESubscriptionEvent(e, field, "UserSession"));
+        }
+      case "onAllCustomersWithAgedGuardiansChange":
+        {
+          return allCustomersWithAgedGuardians
+              .getObject()
+              .subscribe(inspect(field, "data.items"))
+              .map((e) -> fromDataQueryDataChange(e, field));
+        }
+      case "onAllCustomersWithAgedGuardians2Change":
+        {
+          return allCustomersWithAgedGuardians2
+              .getObject()
+              .subscribe(inspect(field, "data.items"))
+              .map((e) -> fromDataQueryDataChange(e, field));
+        }
+      case "onAllCustomersWithLargeInvoicesChange":
+        {
+          AllCustomersWithLargeInvoicesRequest req =
+              ctx.readChild("in", "AllCustomersWithLargeInvoicesRequest");
+          return allCustomersWithLargeInvoices
+              .getObject()
+              .subscribe(inspect(field, "data.items"), req)
+              .map((e) -> fromDataQueryDataChange(e, field));
         }
     }
     D3ELogger.info("Subscription Not found");

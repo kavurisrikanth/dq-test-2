@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import repository.jpa.AnonymousUserRepository;
+import repository.jpa.CustomerRepository;
 import repository.jpa.InvoiceRepository;
 import repository.jpa.OneTimePasswordRepository;
 import repository.jpa.UserRepository;
@@ -36,6 +37,7 @@ public class NativeMutation extends AbstractQueryService {
   @Autowired private TransactionWrapper transactionWrapper;
   @Autowired private IModelSchema schema;
   @Autowired private AnonymousUserRepository anonymousUserRepository;
+  @Autowired private CustomerRepository customerRepository;
   @Autowired private InvoiceRepository invoiceRepository;
   @Autowired private OneTimePasswordRepository oneTimePasswordRepository;
   @Autowired private UserRepository userRepository;

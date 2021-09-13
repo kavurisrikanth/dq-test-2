@@ -2,16 +2,15 @@ package d3e.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import store.DBObject;
-import store.DataStoreEvent;
 import store.StoreEventType;
 
 public class TransactionManager {
 
 	private static ThreadLocal<TransactionManager> threadLocal = new ThreadLocal<>();
-	
+
 	private List<Object> added = new ArrayList<>();
 	private List<Object> updated = new ArrayList<>();
 	private List<Object> deleted = new ArrayList<>();
@@ -54,31 +53,14 @@ public class TransactionManager {
 		deleted.add(obj);
 	}
 
-	public void commit(Consumer<DataStoreEvent> onEvent) {
+	public void commit(BiConsumer<StoreEventType, Object> onChange) {
 		List<Object> addList = new ArrayList<>(added);
 		List<Object> updateList = new ArrayList<>(updated);
 		List<Object> deleteList = new ArrayList<>(deleted);
 
-		addList.forEach(a -> {
-			DataStoreEvent event = new DataStoreEvent(a);
-			event.setEntity(a);
-			event.setType(StoreEventType.Insert);
-			onEvent.accept(event);
-		});
-
-		updateList.forEach(a -> {
-			DataStoreEvent event = new DataStoreEvent(a);
-			event.setEntity(a);
-			event.setType(StoreEventType.Update);
-			onEvent.accept(event);
-		});
-
-		deleteList.forEach(a -> {
-			DataStoreEvent event = new DataStoreEvent(a);
-			event.setEntity(a);
-			event.setType(StoreEventType.Delete);
-			onEvent.accept(event);
-		});
+		addList.forEach(a -> onChange.accept(StoreEventType.Insert, a));
+		updateList.forEach(a -> onChange.accept(StoreEventType.Update, a));
+		deleteList.forEach(a -> onChange.accept(StoreEventType.Delete, a));
 	}
 
 	public boolean isEmpty() {
@@ -92,23 +74,23 @@ public class TransactionManager {
 	public static TransactionManager get() {
 		return threadLocal.get();
 	}
-	
+
 	public static void set(TransactionManager manager) {
 		threadLocal.set(manager);
 	}
-	
+
 	public static void remove() {
 		threadLocal.remove();
 	}
 
 	public void clearChanges() {
-		for(Object obj : this.added){
-			if(obj instanceof DBObject) {
+		for (Object obj : this.added) {
+			if (obj instanceof DBObject) {
 				((DBObject) obj)._clearChanges();
 			}
 		}
-		for(Object obj : this.updated){
-			if(obj instanceof DBObject) {
+		for (Object obj : this.updated) {
+			if (obj instanceof DBObject) {
 				((DBObject) obj)._clearChanges();
 			}
 		}

@@ -95,7 +95,7 @@ public class AllItemsImpl extends AbsDataQueryImpl {
 
   public List<NativeObj> getNativeResult(AllItemsRequest request) {
     String sql =
-        "select a._id a0 from _invoice a where true in (select c._name = :param_0 a0 from _invoice_items c where c._invoice_id = a._id)";
+        "select a._id a0 from _invoice a left join _customer b on b._id = a._customer_id where b._name = :param_0";
     Query query = em.createNativeQuery(sql);
     setParameter(query, "param_0", request.getName());
     this.logQuery(sql, query);

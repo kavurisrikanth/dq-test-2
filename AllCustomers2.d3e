@@ -1,0 +1,6 @@
+(DataQuery AllCustomersWithAgedGuardians2 {
+    query `
+        Customer.all.where((c) => c.guardian != null && c.guardian.age >= 65)
+    `
+    enableSync true
+})

@@ -69,6 +69,7 @@ type Query
 {
 	getObject : DatabaseObject
 	getAnonymousUserById ( id: Long ) : AnonymousUser
+	getCustomerById ( id: Long ) : Customer
 	getInvoiceById ( id: Long ) : Invoice
 	getOneTimePasswordById ( id: Long ) : OneTimePassword
 	checkTokenUniqueInOneTimePassword ( oneTimePasswordId: Long token: String ) : Boolean
@@ -90,6 +91,9 @@ type Subscription
 {
 	onAnonymousUserChangeEvent : AnonymousUserChangeEvent
 	onAnonymousUserChangeEventById ( ids: [Long] ) : AnonymousUserChangeEvent
+	onCustomerChangeEvent : CustomerChangeEvent
+	onCustomerChangeEventById ( ids: [Long] ) : CustomerChangeEvent
+	onCustomerInvoicesChange ( id: Long ) : InvoiceChangeEvent
 	onInvoiceChangeEvent : InvoiceChangeEvent
 	onInvoiceChangeEventById ( ids: [Long] ) : InvoiceChangeEvent
 	onOneTimePasswordChangeEvent : OneTimePasswordChangeEvent
@@ -103,6 +107,12 @@ type Subscription
 type AnonymousUserChangeEvent
 {
 	model : AnonymousUser
+	changeType : ChangeEventType
+}
+
+type CustomerChangeEvent
+{
+	model : Customer
 	changeType : ChangeEventType
 }
 
@@ -128,6 +138,20 @@ type UserSessionChangeEvent
 {
 	model : UserSession
 	changeType : ChangeEventType
+}
+
+type AllCustomersWithLargeInvoicesRequest
+	implements DBObject
+{
+	id : Long
+	localId : Long
+	item : InvoiceItem
+}
+
+input AllCustomersWithLargeInvoicesRequestEntityInput
+{
+	id : Long
+	item : Long
 }
 
 type AllItemsRequest
@@ -174,6 +198,26 @@ input AvatarEntityInput
 	id : Long
 	image : D3EImageEntityInput
 	createFrom : String
+}
+
+type Customer
+	implements DBObject
+{
+	id : Long
+	localId : Long
+	name : String
+	age : Long
+	underAge : Boolean
+	guardian : Customer
+	invoices : [Invoice]
+}
+
+input CustomerEntityInput
+{
+	id : Long
+	name : String
+	age : Long
+	guardian : Long
 }
 
 type D3EImage
@@ -246,15 +290,18 @@ type Invoice
 {
 	id : Long
 	localId : Long
-	name : String
+	totalAmount : Float
+	mostExpensiveItem : InvoiceItem
 	items : [InvoiceItem]
+	customer : Customer
 }
 
 input InvoiceEntityInput
 {
 	id : Long
-	name : String
+	mostExpensiveItem : Long
 	items : [InvoiceItemEntityInput]
+	customer : Long
 }
 
 type InvoiceItem
@@ -264,6 +311,7 @@ type InvoiceItem
 	localId : Long
 	name : String
 	otherNames : [String]
+	cost : Float
 }
 
 input InvoiceItemEntityInput
@@ -271,6 +319,7 @@ input InvoiceItemEntityInput
 	id : Long
 	name : String
 	otherNames : [String]
+	cost : Float
 }
 
 type OneTimePassword

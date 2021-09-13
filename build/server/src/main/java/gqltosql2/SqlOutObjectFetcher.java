@@ -47,6 +47,7 @@ public class SqlOutObjectFetcher {
 	private OutObject fetchReference(Field field, Object value) {
 		OutObject res = new OutObject();
 		DModel<?> parent = schema.getType(ClassUtils.getClass(value).getSimpleName());
+		res.addType(parent.getIndex());
 		while (parent != null) {
 			DModel<?> type = parent;
 			Selection selec = ListExt.firstWhere(field.getSelections(), s -> s.getType() == type);
